@@ -26,9 +26,9 @@ jobs:
           name: Build Docker Image
           command: |
             echo "Building Docker image..."
-            docker build -t nodejswebapp1 -t DOCKER_USERNAME/nodejswebapp1:latest .
+            docker build -t nodejswebapp1 -t DOCKER_USERNAME/simple-python-flask-app:latest .
             echo $DOCKER_PASSWORD | docker login -u DOCKER_USERNAME --password-stdin
-            docker push DOCKER_USERNAME/nodejswebapp1:latest
+            docker push DOCKER_USERNAME/simple-python-flask-app:latest
 
 
 workflows:
