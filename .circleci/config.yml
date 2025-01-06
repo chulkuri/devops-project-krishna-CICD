@@ -1,0 +1,38 @@
+version: 2.1
+
+executors:
+  docker-executor:
+    docker:
+      - image: circleci/python:3.11
+
+jobs:
+  build_test:
+    executor: docker-executor
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: |
+            echo "Installing dependencies..."
+            pip install -r requirements.txt
+
+  build_docker_image:
+    executor: docker-executor
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: false
+      - run:
+          name: Build Docker Image
+          command: |
+            echo "Building Docker image..."
+            docker build -t nodejswebapp1 -t DOCKER_USERNAME/nodejswebapp1:latest .
+            echo $DOCKER_PASSWORD | docker login -u DOCKER_USERNAME --password-stdin
+            docker push DOCKER_USERNAME/nodejswebapp1:latest
+
+
+workflows:
+  build_test:
+    jobs:
+      - build_test
+      - build_docker_image
